@@ -1,3 +1,5 @@
+#This analysis utilized the following dataset.
+
 CREATE TABLE fortune_companies (
     company_id INTEGER PRIMARY KEY,
     company_name TEXT,
@@ -55,3 +57,31 @@ VALUES
     ('Company II', 'Telecommunications', 110.5, 2000, 1, 21, 12, 4.9),
     ('Company JJ', 'Manufacturing', 370.0, 3100, 1, 20, 12, 7.6),
     ('Company KK', 'Healthcare', 150.2, 3400, 0, 16, 8, 5.3);
+
+#Analysis
+#1 Group the data in a new way using a CASE statement.
+SELECT company_name, paid_time_off_days,
+CASE WHEN paid_time_off_days >= 23 THEN "GREAT PTO"
+WHEN paid_time_off_days >= 17 THEN "GOOD PTO"
+WHEN paid_time_off_days >= 14 THEN "AVERAGE PTO"
+ELSE "Poor PTO"
+END AS pto_rating
+FROM fortune_companies
+ORDER BY paid_time_off_days desc;
+
+#2 Use a HAVING clause to determine something interesting about the data per category.
+SELECT company_name, SUM(employees)AS total_employees
+FROM fortune_companies
+GROUP BY industry
+HAVING SUM(employees) >=50000
+ORDER BY SUM(employees) desc;
+
+#3 Use logical operators like AND or OR to filter the data in an interesting way.
+SELECT company_name, industry
+FROM fortune_companies
+WHERE paid_time_off_days>20
+AND maternity_leave_weeks >= 13;
+
+#4 Use an aggregate function like AVG, SUM, COUNT, MAX, and/or MIN to return summary statistics about the data.
+SELECT company_name, MIN(paid_time_off_days)
+FROM fortune_companies;
